@@ -32,7 +32,7 @@ import {
     @Column({ nullable: false })
     salt: string;
     
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     phone: string;
   
     @Column({ nullable: true, type: 'varchar', length: 64 })
