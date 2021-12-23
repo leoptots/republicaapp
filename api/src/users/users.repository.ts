@@ -9,6 +9,7 @@ import {
     InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateUserDtoWhitRole } from './dtos/create-user-with-role.dto';
+import { CredentialsDto } from './dtos/credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -67,7 +68,16 @@ export class UserRepository extends Repository<User> {
             }
         }
     }
+    async checkCredentials(credentialsDto: CredentialsDto): Promise<User> {
+        const { email, password } = credentialsDto;
+        const user = await this.findOne({ email, status: true });
 
+        if (user && (await user.checkPassword(password))) {
+            return user;
+        } else {
+            return null;
+        }
+    }
     private async hashPassword(password: string, salt: string): Promise<string> {
         return bcrypt.hash(password, salt);
     }

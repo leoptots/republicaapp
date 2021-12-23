@@ -13,19 +13,14 @@ export class UsersService {
     ) { }
 
     async createSuperUser(createUserDto: CreateUserDto) {
-        let nDecano = 0
-
-        nDecano = await this.userRepository.count({
-            where: {
-                role: UserRole.DECANO
-            }
-        })
+        const user = await this.userRepository.findOne({ role: UserRole.DECANO, status: true });
         
-        if (nDecano !== 0) throw new UnprocessableEntityException('Só é permitido o cadastro de um Decano!')
+        if (user) throw new UnprocessableEntityException('Só é permitido o cadastro de um Decano!')
+        
         if (createUserDto.password != createUserDto.passwordConfirmation) {
             throw new UnprocessableEntityException('As senhas não conferem');
         } else {
-            return this.userRepository.createSuperUser(createUserDto, UserRole.DECANO);
+            return await this.userRepository.createSuperUser(createUserDto, UserRole.DECANO);
         }
     }
 }
