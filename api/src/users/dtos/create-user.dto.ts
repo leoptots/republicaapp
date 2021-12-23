@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
+import { UserRole } from "../user-roles.enum";
 
 export class CreateUserDto {
   @IsNotEmpty({
@@ -35,4 +36,6 @@ export class CreateUserDto {
     message: 'A confirmação de senha deve ter no mínimo 6 caracteres',
   })
   passwordConfirmation: string;
+
+  role: UserRole
 }

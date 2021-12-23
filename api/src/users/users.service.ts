@@ -9,22 +9,23 @@ import { UserRepository } from './users.repository';
 export class UsersService {
     constructor(
         @InjectRepository(UserRepository)
-        private userRP: UserRepository
+        private userRepository: UserRepository
     ) { }
 
-    async createSuperUser(createUserDto: CreateUserDto): Promise<User> {
+    async createSuperUser(createUserDto: CreateUserDto) {
         let nDecano = 0
 
-        nDecano = await this.userRP.count({
+        nDecano = await this.userRepository.count({
             where: {
                 role: UserRole.DECANO
             }
         })
+        
         if (nDecano !== 0) throw new UnprocessableEntityException('Só é permitido o cadastro de um Decano!')
         if (createUserDto.password != createUserDto.passwordConfirmation) {
             throw new UnprocessableEntityException('As senhas não conferem');
         } else {
-            return this.userRP.createUser(createUserDto, UserRole.DECANO);
+            return this.userRepository.createSuperUser(createUserDto, UserRole.DECANO);
         }
     }
 }

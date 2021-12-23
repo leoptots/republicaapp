@@ -14,7 +14,7 @@ export class UsersController {
         const user = await this.usersService.createSuperUser(createUserDto);
         return {
             user,
-            message: 'Administrador cadastrado com sucesso',
+            message: 'Decano cadastrado com sucesso',
         };
     }
 }
